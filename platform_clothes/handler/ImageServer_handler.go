@@ -1,6 +1,9 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-gonic/gin"
+	_const "platform_clothes/const"
+)
 
 //对账系统handler
 type ImageHandler struct {
@@ -18,10 +21,10 @@ func (h *ImageHandler) Register(e *gin.Engine) {
 
 func (h *ImageHandler) DownloadFile(c *gin.Context) {
 	imageName := c.Param("captchaId")
-	c.File("./DownloadFile/" + imageName)
+	c.File(_const.IMAGE_PATH + _const.DownloadFile + "/" + imageName)
 }
 
 func (h *ImageHandler) Similar(c *gin.Context) {
 	imageName := c.Param("captchaId")
-	c.File("./SimilarClothes/" + imageName)
+	c.File(_const.IMAGE_PATH + _const.SimilarClothes + "/" + imageName)
 }

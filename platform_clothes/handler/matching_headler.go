@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	_const "platform_clothes/const"
 )
 
 //对账系统handler
@@ -32,9 +33,15 @@ func (h *MatchingHandler) UploadImage(c *gin.Context) {
 	}
 
 	log.Println(file.Filename)
-	dst := fmt.Sprintf("./DownloadFile/%s", file.Filename)
+	dst := fmt.Sprintf(_const.IMAGE_PATH+_const.DownloadFile+"/%s", file.Filename)
 	// 上传文件到指定的目录
-	c.SaveUploadedFile(file, dst)
+	err = c.SaveUploadedFile(file, dst)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": err.Error(),
+		})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{
 		"name":   "xxx.png",
 		"status": "done",
@@ -54,9 +61,6 @@ func (h *MatchingHandler) Show(c *gin.Context) {
 	}
 
 	log.Println(file.Filename)
-	dst := fmt.Sprintf("./DownloadFile/%s", file.Filename)
-	// 上传文件到指定的目录
-	c.SaveUploadedFile(file, dst)
 	c.JSON(http.StatusOK, gin.H{
 		"message": fmt.Sprintf("'%s' uploaded!", file.Filename),
 	})

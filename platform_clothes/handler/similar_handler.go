@@ -5,6 +5,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
+	_const "platform_clothes/const"
+	"platform_clothes/httpclient"
 )
 
 //对账系统handler
@@ -17,11 +19,13 @@ func SimilarHandlerInstance() *SimilarHandler {
 
 // Register 注册handler
 func (h *SimilarHandler) Register(e *gin.Engine) {
-	e.POST("/similar", h.Similar)
+	e.POST("/similar/:captchaId", h.Similar)
 }
 
 func (h *SimilarHandler) Similar(c *gin.Context) {
-	filenames, _ := GetAllFile("./SimilarClothes")
+	filenames, _ := GetAllFile(_const.IMAGE_PATH + _const.SimilarClothes)
+	imageName := c.Param("captchaId")
+	httpclient.HttpClientInstance().Get("http://127.0.0.1:8888/" + imageName)
 	c.JSON(http.StatusOK, gin.H{
 		"filenames": filenames,
 	})
